@@ -26,7 +26,7 @@ public class BadRequestMapper implements ExceptionMapper<InvalidFormatException>
 
     String message = String.format("ERRO STATUS: [%s]. Campo [%s] | Valor inserido: [%s] | Request: [%s %s] ", Response.Status.BAD_REQUEST.getStatusCode(),
             exception.getPath().get(0).getFieldName(), exception.getValue(),request.getMethod(),request.getRequestURI());
-    logger.log(Level.INFO,message);
+    logger.log(Level.FINE,message);
 
     List<Error> errors = new ArrayList<>();
     errors.add(new Error(message, Response.Status.BAD_REQUEST.getStatusCode()));

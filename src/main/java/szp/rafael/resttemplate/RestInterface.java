@@ -3,10 +3,13 @@ package szp.rafael.resttemplate;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import szp.rafael.resttemplate.car.Car;
+import szp.rafael.resttemplate.car.CarEndpoint;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.io.Serializable;
@@ -15,7 +18,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 @SuppressWarnings("all")
-public interface RestInterface {
+public interface RestInterface<T> {
 
   default void debug(Object dto) {
     try {
@@ -62,10 +65,23 @@ public interface RestInterface {
     }
   }
 
+  default Response createdResponse(Number id) {
+    return Response.created(
+            UriBuilder.fromResource(this.getClass())
+                    .path(String.valueOf(id)).build()).build();
+  }
+  default Response updatedResponse(Number id) {
+    return Response.ok().header("Location",
+            UriBuilder.fromResource(this.getClass())
+                    .path(String.valueOf(id)).build()).build();
+  }
+
   Logger getLogger();
 
-  public Response getList(UriInfo uriInfo);
-  public Response getOneOrMany(UriInfo uriInfo, Long id);
+  Response getList(UriInfo uriInfo);
+  Response getOneOrMany(UriInfo uriInfo, Long id);
+  Response create(T dto);
+  Response update(Long id);
 
 
 }

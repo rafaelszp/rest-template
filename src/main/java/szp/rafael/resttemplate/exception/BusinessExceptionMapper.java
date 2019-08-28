@@ -26,7 +26,7 @@ public class BusinessExceptionMapper implements ExceptionMapper<BusinessExceptio
     Map<String, String[]> parameterMap = request.getParameterMap();
     String message = String.format("ERRO STATUS: [%s]. | Cause: [%s] | Request: [%s %s] ", BusinessException.getStatusCode(),
              exception.getMessage(), request.getMethod(), request.getRequestURI());
-    logger.log(Level.INFO, message);
+    logger.log(Level.FINE, message);
 
     List<Error> errors = new ArrayList<>();
     errors.add(new Error(message, BusinessException.getStatusCode()));

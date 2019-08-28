@@ -1,15 +1,10 @@
 package szp.rafael.resttemplate.car;
 
 import szp.rafael.resttemplate.RestInterface;
+import szp.rafael.resttemplate.exception.BusinessException;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +12,7 @@ import java.util.logging.Logger;
 
 @Path("/cars")
 @Produces(value = MediaType.APPLICATION_JSON)
-public class CarEndpoint implements RestInterface {
+public class CarEndpoint implements RestInterface<Car> {
   @Override
   public Logger getLogger() {
     return Logger.getLogger(this.getClass().getName());
@@ -61,5 +56,30 @@ public class CarEndpoint implements RestInterface {
     Car singleCar = new Car();
     debug(singleCar);
     return Response.ok(singleCar).build();
+  }
+
+  @Override
+  @POST
+  public Response create(Car dto) {
+    return createdResponse(dto.getId());
+  }
+
+  @Override
+  @PUT
+  @Path("{id: \\d+}")
+  public Response update(@PathParam("id") Long id) {
+    return updatedResponse(id);
+  }
+
+  @GET
+  @Path("/internalError")
+  public Response internalError() {
+    throw new InternalServerErrorException("Wrong behavior when reading system resources");
+  }
+
+  @GET
+  @Path("/businessError")
+  public Response businessError() {
+    throw new BusinessException("Business Error");
   }
 }
