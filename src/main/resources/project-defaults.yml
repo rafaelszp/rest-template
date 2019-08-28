@@ -1,0 +1,4 @@
+resteasy.preferJacksonOverJsonB: true
+swarm:
+  context:
+    path: /rest-template
